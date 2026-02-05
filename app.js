@@ -190,6 +190,11 @@ function flipCard(){
 
 function markCorrect(){
   if(!state.study || !state.study.queue[0]) return;
+  // Require the card to be flipped before marking
+  if(!cardDisplayEl.classList.contains('flipped')){
+    alert('Please flip the card first (press Flip or Space) before marking it Correct.');
+    return;
+  }
   const id = state.study.queue.shift();
   state.study.correct.push(id);
   saveState(); renderActiveDeck();
@@ -197,6 +202,11 @@ function markCorrect(){
 
 function markAgain(){
   if(!state.study || !state.study.queue[0]) return;
+  // Require the card to be flipped before marking
+  if(!cardDisplayEl.classList.contains('flipped')){
+    alert('Please flip the card first (press Flip or Space) before marking Needs Work.');
+    return;
+  }
   const id = state.study.queue.shift();
   state.study.again.push(id);
   state.study.queue.push(id); // re-queue
