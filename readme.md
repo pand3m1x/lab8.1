@@ -2,7 +2,10 @@ Where AI saved time.
 
     AI was really helpful in the beginning. Having a base layout
     of my HTML and CSS, especially because it used root to have all my
-    base colors. 
+    base colors. Another note I want to make, is that I struggle with 
+    generating code, especially with naming conventions and knowing where to 
+    place functions and methods. So I appreaciate having a frame work for my
+    Javascript. 
 
 At least one AI bug you identified and how you fixed it.
 
