@@ -65,23 +65,7 @@
     </aside>
   </main>
 
-  <script>
-    // Minimal JS to toggle empty state visibility depending on presence of decks (for demo)
-    (function(){
-      const decksList = document.getElementById('decks-list');
-      const emptyState = document.getElementById('empty-state');
-      function updateEmptyState(){
-        if(decksList.children.length === 0){ emptyState.style.display='flex'; }
-        else { emptyState.style.display='none'; }
-      }
-      updateEmptyState();
-      // Example: Clicking Add Deck adds a dummy deck to demonstrate layout
-      document.getElementById('add-deck').addEventListener('click', ()=>{
-        const li = document.createElement('li'); li.className='deck-item'; li.innerHTML = '<span>New Deck</span><button class="btn secondary">Open</button>';
-        decksList.appendChild(li); updateEmptyState();
-      });
-    })();
-  </script>
+  <script src="app.js" defer></script>
 </body>
 </html>
 
