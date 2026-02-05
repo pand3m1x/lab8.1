@@ -1,22 +1,55 @@
 Where AI saved time.
 
-    Answer here
+    AI was really helpful in the beginning. Having a base layout
+    of my HTML and CSS, especially because it used root to have all my
+    base colors. 
 
 At least one AI bug you identified and how you fixed it.
 
-    Answer Here
+    inner.HTML for filling out cards, I opted for template, which was what
+    AI recommended when I questioned it about using inner.HTML for editing large body
+    of text.
 
 A code snippet you refactored for clarity.
 
-    Answer Here
+    I left of trying to fix this, both for accessibility purposes and clarity. Because
+    these buttons wouldn't do anything when clicked unless the answer had been revealed, 
+    but you wouldn't know it without playing around. Very frustrating as I've tried adding
+    an inline message and tried an alert, neither were working.
+
+        function markCorrect(){
+      if(!state.study || !state.study.queue[0]) return;
+      // Require the card to be flipped before marking
+      if(!cardDisplayEl.classList.contains('flipped')){
+        showInlineMessage('Please flip the card first (press Flip or Space) before marking it Correct.');
+        return;
+      }
+      const id = state.study.queue.shift();
+      state.study.correct.push(id);
+      saveState(); renderActiveDeck();
+    } 
+
+    function markAgain(){
+      if(!state.study || !state.study.queue[0]) return;
+      // Require the card to be flipped before marking
+      if(!cardDisplayEl.classList.contains('flipped')){
+        showInlineMessage('Please flip the card first (press Flip or Space) before marking Needs Work.');
+        return;
+      }
+      const id = state.study.queue.shift();
+      state.study.again.push(id);
+      state.study.queue.push(id); // re-queue
+      saveState(); renderActiveDeck();
+    } 
 
 One accessibility improvement you added.
 
-    Answer Here
+    Was trying to improve the alerts and inlines to the buttons so users
+    would know when an action was needed. 
 
 What prompt changes improved AI output.
 
-    Answer Here
+    I'm not sure I understand the question.
 
 
 AI Prompt/Challenge Design Rubric:
