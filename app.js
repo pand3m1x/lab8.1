@@ -28,9 +28,28 @@ const againBtn = document.getElementById('again-btn');
 const studyControlsEl = document.getElementById('study-controls');
 const studyFooterEl = document.getElementById('study-footer');
 
+function showInlineMessage(text, timeout=3500){
+  // Use a single inline message inside the study footer and announce it for screen readers
+  let el = studyFooterEl.querySelector('.inline-msg');
+  if(!el){
+    el = document.createElement('div');
+    el.className = 'inline-msg';
+    el.setAttribute('role','status');
+    el.setAttribute('aria-live','polite');
+    studyFooterEl.prepend(el);
+  }
+  el.textContent = text;
+  el.classList.remove('fade-out');
+  // clear previous timeout if present
+  if(el._timeout) clearTimeout(el._timeout);
+
+  // Auto-hide after timeout with a fade
+  el._timeout = setTimeout(()=>{ el.classList.add('fade-out'); el._timeout = setTimeout(()=> el.remove(), 300); }, timeout);
+}
+
 function saveState(){
   localStorage.setItem(LS_KEY, JSON.stringify(state));
-}
+} 
 function loadState(){
   const raw = localStorage.getItem(LS_KEY);
   if(raw){
@@ -69,7 +88,9 @@ function updateEmptyState(){
 }
 
 function createDeck(){
-  if(state.decks.length>=15){ alert('Maximum of 15 decks reached.'); return; }
+  if(state.decks.length>=5){ 
+  alert('You can only have up to 5 decks.');
+  return; }
   const title = prompt('Deck title:');
   if(!title) return;
   const deck = { id: uid('deck'), title: title.trim(), cards: [] };
@@ -156,18 +177,19 @@ function renderActiveDeck(){
 }
 
 function renderStartNewRound(){
-  // remove existing start btn if present
-  const existing = document.querySelector('.start-new-round'); if(existing) existing.remove();
-  const btn = document.createElement('button'); btn.className='btn start-new-round'; btn.textContent='Start New Round';
-  btn.addEventListener('click', ()=>{
-    // new round includes cards that were marked correct previously (re-include) and again (they should already be empty queue)
+  // remove any previous control buttons created earlier
+  document.querySelectorAll('.start-new-round, .try-again').forEach(n=>n.remove());
+
+  // Start a full new round (all cards)
+  const startBtn = document.createElement('button'); startBtn.className='btn start-new-round'; startBtn.textContent='Start New Round';
+  startBtn.addEventListener('click', ()=>{
     const deck = state.decks.find(d=>d.id===state.activeDeckId);
     if(!deck) return;
     const allIds = deck.cards.map(c=>c.id);
     state.study = { queue: shuffleArray(allIds.slice()), correct: [], again: [] };
     saveState(); renderActiveDeck();
   });
-  studyFooterEl.appendChild(btn);
+  studyFooterEl.appendChild(startBtn);
 }
 
 function updatePiles(){
@@ -192,19 +214,19 @@ function markCorrect(){
   if(!state.study || !state.study.queue[0]) return;
   // Require the card to be flipped before marking
   if(!cardDisplayEl.classList.contains('flipped')){
-    alert('Please flip the card first (press Flip or Space) before marking it Correct.');
+    showInlineMessage('Please flip the card first (press Flip or Space) before marking it Correct.');
     return;
   }
   const id = state.study.queue.shift();
   state.study.correct.push(id);
   saveState(); renderActiveDeck();
-}
+} 
 
 function markAgain(){
   if(!state.study || !state.study.queue[0]) return;
   // Require the card to be flipped before marking
   if(!cardDisplayEl.classList.contains('flipped')){
-    alert('Please flip the card first (press Flip or Space) before marking Needs Work.');
+    showInlineMessage('Please flip the card first (press Flip or Space) before marking Needs Work.');
     return;
   }
   const id = state.study.queue.shift();
@@ -216,7 +238,11 @@ function markAgain(){
 function showAddCardModal(deckId){
   const template = document.getElementById('add-card-template');
   if(!template) return; // template missing
-
+  const deck = state.decks.find(d => d.id === deckId);
+  if(deck.cards.length >= 15){
+  alert('This deck already has 15 cards.');
+  return;
+  }
   const clone = template.content.cloneNode(true);
   const overlay = clone.querySelector('.modal-overlay');
   const modal = clone.querySelector('.modal');

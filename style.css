@@ -50,6 +50,12 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:1200
 
 .study-footer{margin-top:1rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.95);font-size:0.9rem;text-align:center}
 
+/* Inline non-blocking message (used for flip reminders) */
+.inline-msg{margin-top:0.5rem;padding:0.5rem 0.75rem;border-radius:6px;background:rgba(255,255,255,0.06);border-left:4px solid var(--gold);color:var(--white);font-weight:600;text-align:center;max-width:100%;transition:opacity 0.3s, transform 0.3s}
+.inline-msg.fade-out{opacity:0;transform:translateY(6px)}
+
+
+
 .container{max-width:1200px;margin:1.25rem auto;display:grid;grid-template-columns:1fr 320px;gap:1rem;padding:0 1rem}
 
 .study-area{background:var(--dark-teal);padding:2rem;border-radius:10px;min-height:60vh;display:flex;flex-direction:column}
