@@ -18,7 +18,14 @@ A code snippet you refactored for clarity.
     I left of trying to fix this, both for accessibility purposes and clarity. Because
     these buttons wouldn't do anything when clicked unless the answer had been revealed, 
     but you wouldn't know it without playing around. Very frustrating as I've tried adding
-    an inline message and tried an alert, neither were working.
+    an inline message and tried an alert, neither were working. (as of 4:46pm EST, so, I 
+    decided to try Windsurf ), and it gave less insite to the whole file and connecting file,
+    so that was unhelpful to finding what connecting factor was preventing the InlineMessage,
+    so I ran it through ChatGPT, and I had to run the prompt twice, and it is because github
+    added a gaurd to prevent the buttons from ever being triggered, and so they would never show
+    because the state of being flipped was already triggered, because that was the only way
+    to have access to the buttons?! Well, that was a long spiral of fighting code that I was trying
+    to refactor. 
 
         function markCorrect(){
       if(!state.study || !state.study.queue[0]) return;

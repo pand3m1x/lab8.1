@@ -210,29 +210,38 @@ function flipCard(){
   correctBtn.disabled = !flipped; againBtn.disabled = !flipped;
 }
 
-function markCorrect(){
-  if(!state.study || !state.study.queue[0]) return;
-  // Require the card to be flipped before marking
-  if(!cardDisplayEl.classList.contains('flipped')){
-    showInlineMessage('Please flip the card first (press Flip or Space) before marking it Correct.');
+function markCorrect() {
+  if (!state.study || !state.study.queue[0]) return;
+
+  if (!cardDisplayEl.classList.contains('flipped')) {
+    showInlineMessage(
+      'Please flip the card first (press Flip or Space) before marking it Correct.',
+      3500
+    );
     return;
   }
+
   const id = state.study.queue.shift();
   state.study.correct.push(id);
-  saveState(); renderActiveDeck();
-} 
+  saveState();
+  renderActiveDeck();
+}
+function markAgain() {
+  if (!state.study || !state.study.queue[0]) return;
 
-function markAgain(){
-  if(!state.study || !state.study.queue[0]) return;
-  // Require the card to be flipped before marking
-  if(!cardDisplayEl.classList.contains('flipped')){
-    showInlineMessage('Please flip the card first (press Flip or Space) before marking Needs Work.');
+  if (!cardDisplayEl.classList.contains('flipped')) {
+    showInlineMessage(
+      'Please flip the card first (press Flip or Space) before marking Needs Work.',
+      3500
+    );
     return;
   }
+
   const id = state.study.queue.shift();
   state.study.again.push(id);
-  state.study.queue.push(id); // re-queue
-  saveState(); renderActiveDeck();
+  state.study.queue.push(id); // re-queue it
+  saveState();
+  renderActiveDeck();
 }
 
 function showAddCardModal(deckId){
