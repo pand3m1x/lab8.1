@@ -65,6 +65,33 @@
     </aside>
   </main>
 
+  <!-- Template for Add Card modal (cloned in JS) -->
+  <template id="add-card-template">
+    <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="add-card-title">
+      <div class="modal" role="document">
+        <h3 id="add-card-title">Add Card</h3>
+        <form class="add-card-form">
+          <label for="front-text">Front text</label>
+          <textarea name="frontText" id="front-text" rows="3"></textarea>
+
+          <label for="front-img">Front image URL (optional)</label>
+          <input name="frontImg" id="front-img" type="url" />
+
+          <label for="back-text">Back text</label>
+          <textarea name="backText" id="back-text" rows="3"></textarea>
+
+          <label for="back-img">Back image URL (optional)</label>
+          <input name="backImg" id="back-img" type="url" />
+
+          <div class="modal-actions" style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.5rem">
+            <button type="button" class="btn" data-action="cancel">Cancel</button>
+            <button type="submit" class="btn" data-action="save">Save Card</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </template>
+
   <script src="app.js" defer></script>
 </body>
 </html>

@@ -204,36 +204,52 @@ function markAgain(){
 }
 
 function showAddCardModal(deckId){
-  const overlay = document.createElement('div'); overlay.style.position='fixed'; overlay.style.inset=0; overlay.style.background='rgba(0,0,0,0.5)'; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center'; overlay.style.zIndex='9999';
-  const modal = document.createElement('div'); modal.style.background='white'; modal.style.padding='1rem'; modal.style.borderRadius='8px'; modal.style.width='min(720px,95%)'; modal.style.maxHeight='90vh'; modal.style.overflow='auto';
-  modal.innerHTML = `
-    <h3>Add Card</h3>
-    <label>Front text<br><textarea id="front-text" rows="3" style="width:100%"></textarea></label>
-    <label>Front image URL (optional)<br><input id="front-img" style="width:100%"></label>
-    <label>Back text<br><textarea id="back-text" rows="3" style="width:100%"></textarea></label>
-    <label>Back image URL (optional)<br><input id="back-img" style="width:100%"></label>
-    <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.5rem">
-      <button class="btn" id="cancel-card">Cancel</button>
-      <button class="btn" id="save-card">Save Card</button>
-    </div>
-  `;
-  overlay.appendChild(modal);
-  document.body.appendChild(overlay);
+  const template = document.getElementById('add-card-template');
+  if(!template) return; // template missing
 
-  document.getElementById('cancel-card').addEventListener('click', ()=> overlay.remove());
-  document.getElementById('save-card').addEventListener('click', ()=>{
-    const ft = document.getElementById('front-text').value.trim();
-    const fi = document.getElementById('front-img').value.trim();
-    const bt = document.getElementById('back-text').value.trim();
-    const bi = document.getElementById('back-img').value.trim();
+  const clone = template.content.cloneNode(true);
+  const overlay = clone.querySelector('.modal-overlay');
+  const modal = clone.querySelector('.modal');
+  const form = clone.querySelector('.add-card-form');
+  const frontText = form.querySelector('[name="frontText"]');
+  const frontImg = form.querySelector('[name="frontImg"]');
+  const backText = form.querySelector('[name="backText"]');
+  const backImg = form.querySelector('[name="backImg"]');
+  const cancelBtn = form.querySelector('[data-action="cancel"]');
+
+  // append to body
+  document.body.appendChild(clone);
+
+  // focus first field
+  frontText.focus();
+
+  function closeModal(){
+    // remove overlay (closest .modal-overlay in DOM)
+    const existing = document.querySelector('.modal-overlay');
+    if(existing) existing.remove();
+    window.removeEventListener('keydown', onKeyDown);
+  }
+
+  function onKeyDown(e){ if(e.key === 'Escape') closeModal(); }
+
+  // close when clicking outside modal
+  overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(); });
+  cancelBtn.addEventListener('click', closeModal);
+  window.addEventListener('keydown', onKeyDown);
+
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const ft = frontText.value.trim();
+    const fi = frontImg.value.trim();
+    const bt = backText.value.trim();
+    const bi = backImg.value.trim();
     if(!ft && !fi && !bt && !bi){ alert('Please add text or an image for at least one side.'); return; }
     const deck = state.decks.find(d=>d.id===deckId);
-    if(!deck){ alert('Deck not found'); overlay.remove(); return; }
+    if(!deck){ alert('Deck not found'); closeModal(); return; }
     const card = { id: uid('card'), front:{ text: ft || '', image:fi || ''}, back:{ text: bt || '', image: bi || '' } };
     deck.cards.push(card);
-    // If this deck is active and study exists, add to queue (push to end)
     if(state.activeDeckId === deckId){ if(state.study) state.study.queue.push(card.id); }
-    saveState(); overlay.remove(); renderActiveDeck(); renderDecks();
+    saveState(); closeModal(); renderActiveDeck(); renderDecks();
   });
 }
 
