@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StudyEasy — Flashcards</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- styles moved to style.css -->
+</head>
+<body>
+  <header>
+    <nav aria-label="Main navigation">
+      <div class="nav-left">
+        <div class="logo">StudyEasy</div>
+        <div class="nav-links" role="navigation">
+          <a href="#about">About</a>
+          <a href="#public">Public Decks</a>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <button class="btn">Sign In</button>
+        <button class="btn">Create Account</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="study-area" aria-labelledby="active-deck">
+      <div class="deck-header">
+        <div class="deck-title">
+          <h2 id="active-deck">Active Deck</h2>
+          <small id="deck-name">(No deck selected)</small>
+        </div>
+
+        <div class="deck-actions">
+          <button class="btn" id="add-card" disabled>Add Card</button>
+        </div>
+      </div>
+
+      <div class="card" id="card-display">Select a deck from the right to begin studying.</div>
+
+      <div class="study-controls" id="study-controls" style="display:none">
+        <button class="btn" id="flip-btn">Flip</button>
+        <button class="btn" id="correct-btn" disabled>Correct</button>
+        <button class="btn" id="again-btn" disabled>Needs Work</button>
+      </div>
+
+      <footer class="study-footer" id="study-footer">
+        <small>Tip: Click <strong>Flip</strong> to reveal the answer, then choose <strong>Correct</strong> or <strong>Needs Work</strong>. Use <strong>Add Card</strong> to add more cards to this deck. When all cards are marked correct the round ends and you can start a new round.</small>
+      </footer>
+    </section>
+
+    <aside class="sidebar" aria-labelledby="decks-heading">
+      <h3 id="decks-heading">Your Decks</h3>
+
+      <ul class="decks-list" id="decks-list">
+        <!-- If there are decks, they appear here as .deck-item elements -->
+      </ul>
+
+      <div class="empty-state" id="empty-state">
+        <p><strong>No decks yet.</strong></p>
+        <button class="btn" id="add-deck">Add Deck</button>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    // Minimal JS to toggle empty state visibility depending on presence of decks (for demo)
+    (function(){
+      const decksList = document.getElementById('decks-list');
+      const emptyState = document.getElementById('empty-state');
+      function updateEmptyState(){
+        if(decksList.children.length === 0){ emptyState.style.display='flex'; }
+        else { emptyState.style.display='none'; }
+      }
+      updateEmptyState();
+      // Example: Clicking Add Deck adds a dummy deck to demonstrate layout
+      document.getElementById('add-deck').addEventListener('click', ()=>{
+        const li = document.createElement('li'); li.className='deck-item'; li.innerHTML = '<span>New Deck</span><button class="btn secondary">Open</button>';
+        decksList.appendChild(li); updateEmptyState();
+      });
+    })();
+  </script>
+</body>
+</html>
+
